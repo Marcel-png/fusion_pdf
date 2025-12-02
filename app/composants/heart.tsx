@@ -16,32 +16,40 @@ export default function App() {
 
   async function handleMerge() {
     if (files.length <= 1) {
-      alert(" Vous devez selectionner au moins deux fichiers pdf.")
+      alert("Vous devez sélectionner au moins deux fichiers PDF.")
       return
     }
 
     setLoading(true)
 
-    const mergedPdf = await PDFDocument.create()
+    try {
+      const mergedPdf = await PDFDocument.create()
 
-    for (const file of files) {
-      const bytes = await file.arrayBuffer()
-      const pdf = await PDFDocument.load(bytes)
+      for (const file of files) {
+        const bytes = await file.arrayBuffer()
+        const pdf = await PDFDocument.load(bytes)
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
+        copiedPages.forEach((page) => mergedPdf.addPage(page))
+      }
 
-      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
-      copiedPages.forEach((page) => mergedPdf.addPage(page))
+      const mergedBytes = await mergedPdf.save()
+
+      // Conversion sécurisée en ArrayBuffer pour Blob
+      const arrayBuffer = new Uint8Array(mergedBytes).buffer
+      const blob = new Blob([arrayBuffer], { type: "application/pdf" })
+
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `${name || "fusion"}.pdf`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error("Erreur lors de la fusion des PDF :", error)
+      alert("Une erreur est survenue lors de la fusion.")
+    } finally {
+      setLoading(false)
     }
-const mergedBytes = await mergedPdf.save()
-    const arrayBuffer = mergedBytes.slice().buffer
-    const blob = new Blob([mergedBytes], { type: "application/pdf" })
-    const url = URL.createObjectURL(blob)
-
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `${name}.pdf`
-    a.click()
-
-    setLoading(false)
   }
 
   const buttonClass =
@@ -63,8 +71,7 @@ const mergedBytes = await mergedPdf.save()
             </span>
             <span className="mt-2 text-sm text-gray-500 max-w-md">
               Cette application vous permet de rassembler facilement plusieurs fichiers PDF en un seul document. 
-              L’utilisation est très simple : il vous suffit de sélectionner les fichiers que vous souhaitez combiner, 
-              puis de lancer la fusion en appuyant sur le bouton <strong>"Sélectionner & Fusionner"</strong>.
+              Sélectionnez les fichiers que vous souhaitez combiner, puis cliquez sur le bouton <strong>"Sélectionner & Fusionner"</strong>.
             </span>
           
             <input
@@ -76,16 +83,22 @@ const mergedBytes = await mergedPdf.save()
                 setFiles(selectedFiles)
               }}
               className="mt-4 mb-2 bg-red-700/20 p-2 rounded border border-blue-500 cursor-pointer"
+              disabled={loading}
             />
 
-            <button type="button" onClick={handleMerge} className={buttonClass}>
+            <button
+              type="button"
+              onClick={handleMerge}
+              className={buttonClass}
+              disabled={loading}
+            >
               {loading ? "Fusion en cours..." : "Sélectionner & Fusionner"}
             </button>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
             <label htmlFor="name" className="text-center text-lg font-semibold">
-              Entrez votre nom et ou prénom ci-dessous
+              Entrez votre nom et/ou prénom ci-dessous
             </label>
 
             <input
