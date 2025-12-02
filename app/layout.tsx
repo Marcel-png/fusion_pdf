@@ -14,9 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-<head>
-<meta name="google-adsense-account" content="ca-pub-8845765535417046">
-</head>
+ <head>
+        <meta name="google-adsense-account" content="ca-pub-8845765535417046" />
+      </head>
       <body
         className={` antialiased`}
       >
