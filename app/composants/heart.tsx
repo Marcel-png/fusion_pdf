@@ -32,7 +32,7 @@ export default function App() {
       copiedPages.forEach((page) => mergedPdf.addPage(page))
     }
 
-    const mergedBytes = await mergedPdf.save()
+    const arrayBuffer = mergedBytes.slice().buffer
     const blob = new Blob([mergedBytes], { type: "application/pdf" })
     const url = URL.createObjectURL(blob)
 
