@@ -71,10 +71,11 @@ export default function App() {
             </span>
             <span className="mt-2 text-sm text-gray-500 max-w-md">
               Cette application vous permet de rassembler facilement plusieurs fichiers PDF en un seul document. 
-              Sélectionnez les fichiers que vous souhaitez combiner, puis cliquez sur le bouton <strong>"Sélectionner & Fusionner"</strong>.
+              Sélectionnez les fichiers que vous souhaitez combiner, puis cliquez sur le bouton <strong>" Fusionner "</strong>.
             </span>
           
             <input
+placeholder="Sélectionner"
               type="file"
               multiple
               accept="application/pdf"
@@ -82,7 +83,8 @@ export default function App() {
                 const selectedFiles = e.target.files ? Array.from(e.target.files) : []
                 setFiles(selectedFiles)
               }}
-              className="mt-4 mb-2 bg-red-700/20 p-2 rounded border border-blue-500 cursor-pointer"
+              className="mt-4 mb-2 bg-red-700/20 p-2
+sm:p-0 rounded border border-blue-500 cursor-pointer"
               disabled={loading}
             />
 
@@ -92,7 +94,7 @@ export default function App() {
               className={buttonClass}
               disabled={loading}
             >
-              {loading ? "Fusion en cours..." : "Sélectionner & Fusionner"}
+              {loading ? "Fusion en cours..." : " Fusionner "}
             </button>
           </div>
         ) : (
