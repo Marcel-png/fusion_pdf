@@ -69,7 +69,7 @@ export default function App() {
             <span className="text-2xl font-bold text-transparent bg-gradient-to-r from-blue-700 via-orange-500 to-red-700 bg-clip-text">
               {show}
             </span>
-            <span className="mt-2 text-sm text-gray-500 max-w-md">
+            <span className="mt-2 text-sm text-black max-w-md">
               Cette application vous permet de rassembler facilement plusieurs fichiers PDF en un seul document. 
               Sélectionnez les fichiers que vous souhaitez combiner, puis cliquez sur le bouton <strong>" Fusionner "</strong>.
             </span>
